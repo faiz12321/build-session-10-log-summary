@@ -82,6 +82,16 @@ class MainTests(unittest.TestCase):
                          "2026-10-15 09:00  2", "2026-10-15 10:00  2", "line 8: 'error: connection lost'"):
             self.assertIn(expected, out)
 
+    def test_more_than_three_unreadable_lines_report_the_rest(self):
+        path = self.dir / "many.log"
+        path.write_text("".join(f"junk {i}\n" for i in range(5)) + "2026-10-15 09:00:00 INFO ok\n")
+        code, out = self.run_main([str(path)])
+        self.assertEqual(code, 0)
+        self.assertIn("Unreadable lines: 5", out)
+        self.assertIn("line 3: 'junk 2'", out)
+        self.assertNotIn("junk 3", out)
+        self.assertIn("... and 2 more not shown", out)
+
     def test_empty_file(self):
         path = self.dir / "empty.log"
         path.write_text("")
