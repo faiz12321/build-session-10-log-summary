@@ -6,7 +6,7 @@ A small read-only Python tool built step by step. Give it a text log and it coun
 
     python make_sample.py                     # makes a made-up log in sample/
     python logsummary.py sample/app.log       # summary of that log
-    python -m unittest -v                     # fifteen automated tests
+    python -m unittest -v                     # sixteen automated tests
 
 On Windows, if `python` is not found, use `py`.
 
@@ -18,7 +18,7 @@ On Windows, if `python` is not found, use `py`.
 
 ## Notes
 
-- It expects lines like `2026-10-15 09:12:03 ERROR Disk almost full`: a date, a time, an upper-case level, then a message. Any other line is counted as unreadable and the first three are shown. That includes lower-case levels and impossible dates. A real log may use a different format, and then most lines would be unreadable.
+- It expects lines like `2026-10-15 09:12:03 ERROR Disk almost full`: a date, a time, an upper-case level, then a message. Any other line is counted as unreadable. The first three are shown and the rest are reported as a number. That includes lower-case levels and impossible dates. A real log may use a different format, and then most lines would be unreadable.
 - The hour in "Errors per hour" is the hour written in the log. No time zones are handled.
 - The counts are only as good as the log. A summary does not tell you why something failed.
 - Python documentation used: collections.Counter (https://docs.python.org/3/library/collections.html) and datetime.strptime (https://docs.python.org/3/library/datetime.html).
