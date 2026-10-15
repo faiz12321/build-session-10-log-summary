@@ -1,0 +1,24 @@
+name: test
+on: [push, workflow_dispatch]
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m unittest -v
+      - run: python make_sample.py
+      - name: Summary of the sample log
+        shell: python
+        run: |
+          import subprocess, sys
+          out = subprocess.run([sys.executable, "logsummary.py", "sample/app.log"], capture_output=True, text=True)
+          assert out.returncode == 0, out.stdout
+          for expected in ("Lines with text: 12", "ERROR    3", "CRITICAL 1", "Unreadable lines: 2"):
+              assert expected in out.stdout, (expected, out.stdout)
+          print("Sample log summary checks passed.")
