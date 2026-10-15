@@ -2,7 +2,7 @@
 
 Usage:  python logsummary.py FILE
 A readable line looks like:  2026-10-15 09:12:03 ERROR Disk almost full
-Other lines are counted and the first few are shown, so nothing is silently skipped.
+Other lines are all counted. The first three are shown and the rest are reported as a number.
 """
 import sys
 from collections import Counter
@@ -68,12 +68,14 @@ def main(argv):
     print(f"Unreadable lines: {len(unreadable)}")
     for number, text in unreadable[:SHOW]:
         print(f"  line {number}: {text[:60]!r}")
+    if len(unreadable) > SHOW:
+        print(f"  ... and {len(unreadable) - SHOW} more not shown")
     if by_hour:
         print("Errors per hour (ERROR and CRITICAL):")
         for hour in sorted(by_hour):
             print(f"  {hour}  {by_hour[hour]}")
     if first_errors:
-        print("First errors:")
+        print(f"First errors (up to {SHOW} shown):")
         for number, message in first_errors:
             print(f"  line {number}: {message[:60]}")
     return 0
