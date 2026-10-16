@@ -1,7 +1,8 @@
 """Makes a made-up log called sample/app.log. It holds invented lines only, plus a few lines that are
 deliberately badly formed, like a real log that has been edited or cut.
 
-Run: python make_sample.py
+Run only in a new empty lesson folder: python make_sample.py
+Setup refuses any existing sample path and exclusively creates a new fictional log.
 """
 import sys
 from pathlib import Path
@@ -24,13 +25,17 @@ error: connection lost
 
 def make(folder):
     folder = Path(folder)
-    folder.mkdir(exist_ok=True)
+    folder.mkdir()
     path = folder / "app.log"
-    path.write_text(LINES, encoding="utf-8", newline="\n")
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        handle.write(LINES)
     return path
 
 
 if __name__ == "__main__":
-    make(Path(__file__).resolve().parent / "sample")
+    try:
+        make(Path(__file__).resolve().parent / "sample")
+    except FileExistsError:
+        raise SystemExit("Stopped: sample already exists. Nothing was replaced or deleted.")
     print("Made sample/app.log")
     sys.exit(0)
