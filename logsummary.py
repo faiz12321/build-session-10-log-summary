@@ -5,6 +5,29 @@ A readable line looks like:  2026-10-15 09:12:03 ERROR Disk almost full
 Other lines are all counted. The first three are shown and the rest are reported as a number.
 """
 import sys
+import stat
+from pathlib import Path
+
+def safe_input(value, directory=False):
+    path = Path(value).absolute()
+    if '..' in path.parts:
+        raise OSError('Parent-traversal paths are unsupported.')
+    for part in [*reversed(path.parents), path]:
+        info = part.lstat()
+        if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
+            raise OSError('Links/reparse points are unsupported.')
+    info = path.lstat()
+    if directory:
+        if not stat.S_ISDIR(info.st_mode):
+            raise NotADirectoryError('Expected an ordinary directory.')
+    elif not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise OSError('Expected an ordinary singly linked file.')
+    return path
+
+
+
+
+
 from collections import Counter
 from datetime import datetime
 
@@ -56,10 +79,10 @@ def main(argv):
         print("Usage: python logsummary.py FILE")
         return 2
     try:
-        with open(argv[1], encoding="utf-8", errors="replace") as handle:
+        with open(safe_input(argv[1]), encoding="utf-8", errors="replace") as handle:
             total, levels, by_hour, first_errors, unreadable = summarise(handle)
     except OSError as error:
-        print(f"Could not read {argv[1]}: {error.strerror}")
+        print(f"Could not read {argv[1]}: {error.strerror or error}")
         return 2
     print(f"File: {argv[1]}")
     print(f"Lines with text: {total}")
