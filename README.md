@@ -6,7 +6,7 @@ A small read-only Python tool built step by step. Give it a text log and it coun
 
     python make_sample.py                     # makes a made-up log in sample/
     python logsummary.py sample/app.log       # summary of that log
-    python -m unittest -v                     # sixteen automated tests
+    python -m unittest -v                     # 20 temporary-fixture tests
 
 On Windows, if `python` is not found, use `py`.
 
@@ -15,6 +15,12 @@ On Windows, if `python` is not found, use `py`.
 - `logsummary.py` - the tool
 - `make_sample.py` - makes a made-up log, including a few badly formed lines on purpose
 - `test_logsummary.py` - tests
+
+## Setup safety and evidence
+
+Setup refuses any existing sample path and exclusively creates a fictional app.log inside a new folder. It never resets old data. Start in a new empty lesson folder. Four new setup collision/repeat tests compare nested unrelated bytes and modification times. The checker is unchanged. It can follow a source file link; reports reveal excerpts and paths. Invalid UTF-8 bytes are replaced during decoding, not validated. Keep private output private.
+
+Two Windows and two Ubuntu recordings pass all 20 tests. Paired outputs differ only in unittest time and the unique temporary path in the intentionally failing first-version traceback. Displays use first Windows output; versions and test-name rendering can differ. The recorder saves the exact visible first/final file versions inside a unique temporary folder and removes only that recording folder. Setup itself refuses a second run.
 
 ## Notes
 
