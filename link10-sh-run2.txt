@@ -1,0 +1,100 @@
+### CMD: python --version
+Python 3.12.3
+### EXIT: 0
+
+### CMD: python make_sample.py
+Made sample/app.log
+### EXIT: 0
+
+### CMD: python make_sample.py
+Stopped: sample already exists. Nothing was replaced or deleted.
+### EXIT: 1
+
+### CMD: python -c "print(open('sample/app.log').read())"
+2026-10-15 08:58:10 INFO Server started
+2026-10-15 09:01:44 INFO Request /home took 12 ms
+2026-10-15 09:12:03 ERROR Disk almost full
+2026-10-15 09:12:09 WARNING Retrying upload
+2026-10-15 09:40:55 ERROR Upload failed
+
+2026-10-15 10:05:01 INFO Request /about took 9 ms
+error: connection lost
+2026-10-15 10:07:30 CRITICAL Database not reachable
+2026-10-15 10:07:31 ERROR Request /home failed
+2026-10-15 10:30:00 DEBUG Cache cleared
+2026-02-30 10:31:00 INFO Impossible date
+2026-10-15 11:02:12 INFO Server stopped
+
+### EXIT: 0
+
+### CMD: python logsummary.py sample/app.log
+Traceback (most recent call last):
+  File "/tmp/lesson10-link-record-es1vgtcl/logsummary.py", line 5, in <module>
+    level = line.split()[2]
+            ~~~~~~~~~~~~^^^
+IndexError: list index out of range
+### EXIT: 1
+
+### CMD: python logsummary.py sample/app.log
+File: sample/app.log
+Lines with text: 12
+  DEBUG    1
+  INFO     4
+  WARNING  1
+  ERROR    3
+  CRITICAL 1
+Unreadable lines: 2
+  line 8: 'error: connection lost'
+  line 12: '2026-02-30 10:31:00 INFO Impossible date'
+Errors per hour (ERROR and CRITICAL):
+  2026-10-15 09:00  2
+  2026-10-15 10:00  2
+First errors (up to 3 shown):
+  line 3: Disk almost full
+  line 5: Upload failed
+  line 9: Database not reachable
+### EXIT: 0
+
+### CMD: python logsummary.py nothing.log
+Could not read nothing.log: No such file or directory
+### EXIT: 2
+
+### CMD: python -m unittest -v
+test_bytes_that_are_not_text_do_not_crash (test_logsummary.MainTests.test_bytes_that_are_not_text_do_not_crash) ... ok
+test_empty_file (test_logsummary.MainTests.test_empty_file) ... ok
+test_file_not_changed (test_logsummary.MainTests.test_file_not_changed) ... ok
+test_missing_file_and_folder_and_no_argument (test_logsummary.MainTests.test_missing_file_and_folder_and_no_argument) ... ok
+test_more_than_three_unreadable_lines_report_the_rest (test_logsummary.MainTests.test_more_than_three_unreadable_lines_report_the_rest) ... ok
+test_sample_log_summary (test_logsummary.MainTests.test_sample_log_summary) ... ok
+test_impossible_date_is_not_readable (test_logsummary.ParseTests.test_impossible_date_is_not_readable) ... ok
+test_level_without_message_is_readable (test_logsummary.ParseTests.test_level_without_message_is_readable) ... ok
+test_lowercase_level_is_not_readable (test_logsummary.ParseTests.test_lowercase_level_is_not_readable) ... ok
+test_readable_line (test_logsummary.ParseTests.test_readable_line) ... ok
+test_short_and_odd_lines_are_not_readable (test_logsummary.ParseTests.test_short_and_odd_lines_are_not_readable) ... ok
+test_dangling_link_refuses (test_logsummary.PathSafety.test_dangling_link_refuses) ... ok
+test_directory_refuses (test_logsummary.PathSafety.test_directory_refuses) ... ok
+test_file_link_refuses (test_logsummary.PathSafety.test_file_link_refuses) ... ok
+test_hardlink_refuses (test_logsummary.PathSafety.test_hardlink_refuses) ... ok
+test_linked_ancestor_refuses (test_logsummary.PathSafety.test_linked_ancestor_refuses) ... ok
+test_metadata_failure_nonzero (test_logsummary.PathSafety.test_metadata_failure_nonzero) ... ok
+test_pipe_refuses_without_blocking (test_logsummary.PathSafety.test_pipe_refuses_without_blocking) ... ok
+test_reparse_attribute_refuses (test_logsummary.PathSafety.test_reparse_attribute_refuses) ... ok
+test_self_loop_refuses (test_logsummary.PathSafety.test_self_loop_refuses) ... ok
+test_setup_linked_parent_refuses (test_logsummary.PathSafety.test_setup_linked_parent_refuses) ... ok
+test_setup_traversal_refuses (test_logsummary.PathSafety.test_setup_traversal_refuses) ... ok
+test_traversal_refuses (test_logsummary.PathSafety.test_traversal_refuses) ... ok
+test_cli_refuses_without_replacing (test_logsummary.SetupSafetyTests.test_cli_refuses_without_replacing) ... ok
+test_existing_file_preserved (test_logsummary.SetupSafetyTests.test_existing_file_preserved) ... ok
+test_existing_folder_preserves_nested_bytes_and_metadata (test_logsummary.SetupSafetyTests.test_existing_folder_preserves_nested_bytes_and_metadata) ... ok
+test_repeat_setup_preserves_generated_bytes_and_metadata (test_logsummary.SetupSafetyTests.test_repeat_setup_preserves_generated_bytes_and_metadata) ... ok
+test_counts_levels_and_ignores_blank_lines (test_logsummary.SummariseTests.test_counts_levels_and_ignores_blank_lines) ... ok
+test_errors_grouped_by_hour_include_critical (test_logsummary.SummariseTests.test_errors_grouped_by_hour_include_critical) ... ok
+test_first_errors_are_limited_and_numbered (test_logsummary.SummariseTests.test_first_errors_are_limited_and_numbered) ... ok
+test_unreadable_lines_are_kept_with_line_numbers (test_logsummary.SummariseTests.test_unreadable_lines_are_kept_with_line_numbers) ... ok
+test_windows_line_endings (test_logsummary.SummariseTests.test_windows_line_endings) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.037s
+
+OK
+### EXIT: 0
